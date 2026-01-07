@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Download, Copy, Check, AlertCircle, Search, Package } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { IconSettings } from './types';
@@ -6,10 +6,16 @@ import { ExportState } from '../../types';
 import { exportToPng, copyToClipboard, generateFilename } from '../../logic/image-export';
 import { exportAllIconsToZip } from '../../logic/bulk-icon-export';
 
-// Get all icon names from Lucide
-const ALL_ICONS = Object.keys(LucideIcons)
-  .filter(key => key !== 'createLucideIcon' && key !== 'default' && /^[A-Z]/.test(key))
-  .sort();
+// Get all icon names from Lucide (deduplicated, excluding aliases)
+const ALL_ICONS = Array.from(new Set(
+  Object.keys(LucideIcons)
+    .filter(key =>
+      key !== 'createLucideIcon' &&
+      key !== 'default' &&
+      /^[A-Z]/.test(key) &&
+      !key.endsWith('Icon') // Remove aliases like "HeartIcon" (keep "Heart")
+    )
+)).sort();
 
 export default function IconMaker() {
   const [selectedIcon, setSelectedIcon] = useState('Heart');

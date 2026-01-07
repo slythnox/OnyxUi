@@ -2,11 +2,6 @@ import { toPng } from 'html-to-image';
 
 export async function exportToPng(element: HTMLElement, filename: string): Promise<void> {
     try {
-        // Ensure the element is visible and properly rendered
-        if (!element.offsetParent) {
-            throw new Error('Element is not visible');
-        }
-
         // Wait for fonts to load
         await document.fonts.ready;
 
@@ -63,15 +58,12 @@ export async function copyToClipboard(element: HTMLElement): Promise<void> {
             throw new Error('Clipboard API not available');
         }
 
-        // Ensure the element is visible and properly rendered
-        if (!element.offsetParent) {
-            throw new Error('Element is not visible');
-        }
+        // Wait for fonts to load
+        await document.fonts.ready;
 
         const dataUrl = await toPng(element, {
             quality: 1,
             pixelRatio: 2,
-            backgroundColor: 'transparent',
             cacheBust: true,
             style: {
                 transform: 'scale(1)',

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Download, Copy, Check, AlertCircle } from 'lucide-react';
 import { CodeSettings } from './types';
 import { ExportState } from '../../types';
@@ -129,7 +129,7 @@ export default function SnippetMaker() {
               {/* Background Selection */}
               <div>
                 <label className="block text-sm font-medium text-white mb-2">Background</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {BACKGROUND_OPTIONS.map((bg) => (
                     <button
                       key={bg.value}

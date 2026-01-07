@@ -11,7 +11,7 @@ export const CODE_THEMES: CodeTheme[] = [
     {
         name: 'Dracula',
         value: 'dracula',
-        background: '#000000',
+        background: '#282a36',
         color: '#f8f8f2'
     },
     {
@@ -23,19 +23,19 @@ export const CODE_THEMES: CodeTheme[] = [
     {
         name: 'Monokai',
         value: 'monokai',
-        background: '#0a0a0a',
+        background: '#272822',
         color: '#f8f8f2'
     },
     {
         name: 'One Dark',
         value: 'one-dark',
-        background: '#000000',
+        background: '#282c34',
         color: '#abb2bf'
     },
     {
         name: 'Tokyo Night',
         value: 'tokyo-night',
-        background: '#000000',
+        background: '#1a1b26',
         color: '#a9b1d6'
     }
 ];
@@ -49,7 +49,7 @@ export const BACKGROUND_OPTIONS: BackgroundOption[] = [
     {
         name: 'Blue Gradient',
         value: 'blue',
-        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
     },
     {
         name: 'Green Gradient',
