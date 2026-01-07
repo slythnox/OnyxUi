@@ -14,6 +14,17 @@ export default function ColorSystemMaker() {
     const [palette, setPalette] = useState<ColorPalette>(generateColorPalette(colorState));
     const [codeCopied, setCodeCopied] = useState(false);
 
+    const [demos, setDemos] = useState({
+        contrast: false,
+        gradient: false,
+        highlight: false,
+        shadow: false
+    });
+
+    const toggleDemo = (key: keyof typeof demos) => {
+        setDemos(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
     // Update palette whenever color state changes
     useEffect(() => {
         const newPalette = generateColorPalette(colorState);
@@ -160,59 +171,74 @@ export default function ColorSystemMaker() {
                             </div>
                         </div>
 
-                        {/* Info Cards */}
+                        {/* Info Cards - Interactive Demos */}
                         <div className="grid grid-cols-2 gap-3">
-                            <div
-                                className="rounded-lg p-3 transition-all duration-300 border"
+                            <button
+                                onClick={() => toggleDemo('contrast')}
+                                className="text-left rounded-lg p-3 transition-all duration-300 border relative overflow-hidden group"
                                 style={{
-                                    backgroundColor: palette.bg,
-                                    borderColor: palette.borderMuted
+                                    backgroundColor: demos.contrast ? palette.bgDark : palette.bg,
+                                    borderColor: demos.contrast ? palette.primary : palette.borderMuted
                                 }}
                             >
-                                <h3 className="text-xs font-semibold mb-0.5" style={{ color: palette.text }}>Contrast</h3>
-                                <p className="text-[10px] leading-tight" style={{ color: palette.textMuted }}>
-                                    Mix sharper headings with muted text
-                                </p>
-                            </div>
+                                <div className="relative z-10">
+                                    <h3 className="text-xs font-semibold mb-0.5 flex items-center justify-between" style={{ color: demos.contrast ? palette.primary : palette.text }}>
+                                        Contrast
+                                        {demos.contrast && <Check className="w-3 h-3" />}
+                                    </h3>
+                                    <p className="text-[10px] leading-tight" style={{ color: demos.contrast ? palette.text : palette.textMuted }}>
+                                        {demos.contrast ? 'High contrast mode active' : 'Click to test contrast'}
+                                    </p>
+                                </div>
+                            </button>
 
-                            <div
-                                className="rounded-lg p-3 transition-all duration-300 border"
+                            <button
+                                onClick={() => toggleDemo('gradient')}
+                                className="text-left rounded-lg p-3 transition-all duration-300 border relative overflow-hidden"
                                 style={{
-                                    backgroundColor: palette.bg,
-                                    borderColor: palette.borderMuted
+                                    background: demos.gradient
+                                        ? `linear-gradient(135deg, ${palette.bgDark}, ${palette.bgLight})`
+                                        : palette.bg,
+                                    borderColor: demos.gradient ? 'transparent' : palette.borderMuted,
+                                    boxShadow: demos.gradient ? `0 0 20px -5px ${palette.primary}40` : 'none'
                                 }}
                             >
                                 <h3 className="text-xs font-semibold mb-0.5" style={{ color: palette.text }}>Gradients</h3>
                                 <p className="text-[10px] leading-tight" style={{ color: palette.textMuted }}>
-                                    Play with gradient background
+                                    {demos.gradient ? 'Gradient background applied' : 'Click to apply gradient'}
                                 </p>
-                            </div>
+                            </button>
 
-                            <div
-                                className="rounded-lg p-3 transition-all duration-300 border"
+                            <button
+                                onClick={() => toggleDemo('highlight')}
+                                className="text-left rounded-lg p-3 transition-all duration-300 border relative"
                                 style={{
                                     backgroundColor: palette.bg,
-                                    borderColor: palette.borderMuted
+                                    borderColor: demos.highlight ? palette.highlight : palette.borderMuted,
+                                    boxShadow: demos.highlight ? `inset 0 1px 0 0 rgba(255,255,255,0.1), 0 0 0 1px ${palette.highlight}` : 'none'
                                 }}
                             >
                                 <h3 className="text-xs font-semibold mb-0.5" style={{ color: palette.text }}>Highlight</h3>
                                 <p className="text-[10px] leading-tight" style={{ color: palette.textMuted }}>
-                                    Use a lighter border to simulate light
+                                    {demos.highlight ? 'Inner highlight active' : 'Click to see highlight'}
                                 </p>
-                            </div>
+                            </button>
 
-                            <div
-                                className="rounded-lg p-3 transition-all duration-300 border"
+                            <button
+                                onClick={() => toggleDemo('shadow')}
+                                className="text-left rounded-lg p-3 transition-all duration-300 border"
                                 style={{
                                     backgroundColor: palette.bg,
-                                    borderColor: palette.borderMuted
+                                    borderColor: demos.shadow ? palette.border : palette.borderMuted,
+                                    boxShadow: demos.shadow ? `0 10px 25px -5px rgba(0,0,0,0.5), 0 0 0 1px ${palette.borderMuted}` : 'none',
+                                    transform: demos.shadow ? 'translateY(-2px)' : 'none'
                                 }}
                             >
                                 <h3 className="text-xs font-semibold mb-0.5" style={{ color: palette.text }}>Shadows</h3>
                                 <p className="text-[10px] leading-tight" style={{ color: palette.textMuted }}>
-                                    Shadows to add depth
+                                    {demos.shadow ? 'Elevation active' : 'Click to add depth'}
                                 </p>
-                            </div>
+                            </button>
                         </div>
 
                         {/* Action Buttons */}

@@ -7,10 +7,12 @@ export async function exportToPng(element: HTMLElement, filename: string): Promi
             throw new Error('Element is not visible');
         }
 
+        // Wait for fonts to load
+        await document.fonts.ready;
+
         const dataUrl = await toPng(element, {
             quality: 1,
             pixelRatio: 2,
-            backgroundColor: 'transparent',
             cacheBust: true,
             style: {
                 transform: 'scale(1)',

@@ -3,15 +3,17 @@ import { Download, Copy, Check, AlertCircle, Search, Package } from 'lucide-reac
 import * as LucideIcons from 'lucide-react';
 import { IconSettings } from './types';
 import { ExportState } from '../../types';
-import { ICON_CATEGORIES } from '../../logic/constants';
 import { exportToPng, copyToClipboard, generateFilename } from '../../logic/image-export';
 import { exportAllIconsToZip } from '../../logic/bulk-icon-export';
 
+// Get all icon names from Lucide
+const ALL_ICONS = Object.keys(LucideIcons)
+  .filter(key => key !== 'createLucideIcon' && key !== 'default' && /^[A-Z]/.test(key))
+  .sort();
 
 export default function IconMaker() {
   const [selectedIcon, setSelectedIcon] = useState('Heart');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Popular');
   const [settings, setSettings] = useState<IconSettings>({
     size: 48,
     strokeWidth: 2,
@@ -90,17 +92,11 @@ export default function IconMaker() {
   };
 
   const handleBulkExport = async () => {
-    // Get all icons from all categories
-    const allIconNames: string[] = [];
-    ICON_CATEGORIES.forEach(category => {
-      allIconNames.push(...category.icons);
-    });
-
-    setBulkExportState({ isExporting: true, progress: 0, total: allIconNames.length });
+    setBulkExportState({ isExporting: true, progress: 0, total: ALL_ICONS.length });
 
     try {
       await exportAllIconsToZip(
-        allIconNames,
+        ALL_ICONS,
         LucideIcons,
         settings,
         (current, total) => {
@@ -118,31 +114,12 @@ export default function IconMaker() {
     }
   };
 
-  // Filter icons based on search and category
+  // Filter icons based on search
   const filteredIcons = useMemo(() => {
-    const category = ICON_CATEGORIES.find(cat => cat.name === selectedCategory);
-    if (!category) return [];
-
-    if (!searchTerm) return category.icons;
-
-    return category.icons.filter(icon =>
+    if (!searchTerm) return ALL_ICONS;
+    return ALL_ICONS.filter(icon =>
       icon.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [selectedCategory, searchTerm]);
-
-  // Get all icons for search across categories
-  const allIcons = useMemo(() => {
-    if (!searchTerm) return [];
-
-    const icons: { name: string; category: string }[] = [];
-    ICON_CATEGORIES.forEach(category => {
-      category.icons.forEach(icon => {
-        if (icon.toLowerCase().includes(searchTerm.toLowerCase())) {
-          icons.push({ name: icon, category: category.name });
-        }
-      });
-    });
-    return icons;
   }, [searchTerm]);
 
   // Safely get the icon component
@@ -179,36 +156,20 @@ export default function IconMaker() {
             />
           </div>
 
-          {/* Category Tabs */}
-          {!searchTerm && (
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {ICON_CATEGORIES.map((category) => (
-                <button
-                  key={category.name}
-                  onClick={() => setSelectedCategory(category.name)}
-                  className={`px-2.5 py-1.5 text-xs rounded-lg transition-all duration-300 font-medium ${selectedCategory === category.name
-                    ? 'bg-gradient-to-r bg-primary text-white shadow-lg'
-                    : 'bg-white/10 text-white/70 hover:text-white hover:bg-white/20'
-                    }`}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Category Tabs - REMOVED */}
 
           {/* Icon Grid - Horizontal Scroll */}
           <div className="overflow-x-auto scrollbar-custom">
             <div className="flex gap-2 pb-2" style={{ minWidth: 'max-content' }}>
-              {(searchTerm ? allIcons : filteredIcons.map(name => ({ name, category: selectedCategory })))
-                .slice(0, 30)
-                .map(({ name, category }) => {
+              {filteredIcons
+                .slice(0, 50)
+                .map((name) => {
                   const IconComp = (LucideIcons as any)[name];
                   if (!IconComp) return null;
 
                   return (
                     <button
-                      key={`${category}-${name}`}
+                      key={name}
                       onClick={() => setSelectedIcon(name)}
                       className={`flex-shrink-0 p-2.5 rounded-lg transition-all duration-300 group ${selectedIcon === name
                         ? 'bg-gradient-to-r bg-primary shadow-lg scale-105'
@@ -541,35 +502,20 @@ export default function IconMaker() {
             />
           </div>
 
-          {/* Category Tabs */}
-          {!searchTerm && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {ICON_CATEGORIES.map((category) => (
-                <button
-                  key={category.name}
-                  onClick={() => setSelectedCategory(category.name)}
-                  className={`px-3 py-2 text-xs rounded-lg transition-all duration-300 font-medium ${selectedCategory === category.name
-                    ? 'bg-gradient-to-r bg-primary text-white shadow-lg'
-                    : 'bg-white/10 text-white/70 hover:text-white hover:bg-white/20'
-                    }`}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Category Tabs - REMOVED */}
 
           {/* Icon Grid */}
           <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[calc(100vh-300px)]">
             <div className="grid grid-cols-6 gap-2">
-              {(searchTerm ? allIcons : filteredIcons.map(name => ({ name, category: selectedCategory })))
-                .map(({ name, category }) => {
+              {filteredIcons
+                .slice(0, 500)
+                .map((name) => {
                   const IconComp = (LucideIcons as any)[name];
                   if (!IconComp) return null;
 
                   return (
                     <button
-                      key={`${category}-${name}`}
+                      key={name}
                       onClick={() => setSelectedIcon(name)}
                       className={`p-3 rounded-xl transition-all duration-300 group ${selectedIcon === name
                         ? 'bg-gradient-to-r bg-primary shadow-lg scale-105'
