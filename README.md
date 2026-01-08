@@ -4,7 +4,7 @@
 
 A modern web application for creating and exporting beautiful code snippets, custom icons, and dynamic color systems. Built with React, TypeScript, and Tailwind CSS.
 
-## ✨ Features
+## Features
 
 ### 📝 Code Snippets
 - Live code editor with syntax highlighting
