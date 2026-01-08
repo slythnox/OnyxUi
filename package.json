@@ -14,15 +14,14 @@
     "react",
     "typescript"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "slythnox",
   "license": "MIT",
-  "homepage": "https://uwusnippets.vercel.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/uwusnippets.git"
+    "url": "https://github.com/slythnox/OnyxUi.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/uwusnippets/issues"
+    "url": "https://github.com/slythnox/OnyxUi/issues"
   },
   "scripts": {
     "dev": "vite",
